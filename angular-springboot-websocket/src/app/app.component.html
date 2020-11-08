@@ -1,0 +1,92 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript being
+  enabled. Please enable
+  Javascript and reload this page!</h2></noscript>
+<div id="main-content" class="container">
+
+  <div class="row">
+    <div class="col-6">
+      <h1> Simple chat application</h1>
+    </div>
+    <div class="col-6">
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-8">
+      <h2> {{ greeting }}</h2>
+    </div>
+    <div class="col-4 input-group">
+      <input type="text" placeholder="Enter your name then enjoy" [(ngModel)]="name" [value]="name"
+             class="form-control" name="name">
+      <span class="input-group-btn">
+        <button (click)="login()" class="btn btn-primary">Go!</button>
+      </span>
+    </div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="message-box">
+      <ol #chatLog class="chat-logs" [scrollTop]="chatLog.scrollHeight">
+        <li class="message" *ngFor="let message of messages">
+          <div
+            *ngIf="message.from !== name;
+                  then incoming_msg;
+                  else outgoing_msg"
+          ></div>
+          <ng-template #incoming_msg>
+            <div class="incoming-msg">
+              <div class="incoming-msg-img"> <img src="https://ptetutorials.com/images/user-profile.png"
+                                                  alt="{{message.from}}">
+                <div class="sender-name">
+                  <p>{{message.from}}</p>
+                </div>
+              </div>
+
+              <div class="received-msg">
+                <div class="received-withd-msg">
+                  <p *ngIf="!message.fileName || message.fileName === ''">{{ message.text }}</p>
+                  <p *ngIf="message.fileName" ngbTooltip="CLick to download" placement="top" (click)="download(message)">
+                    <i class="fa fa-file" aria-hidden="true"></i>
+                    {{message.fileName}} is received
+                  </p>
+                  <span class="time-date"> {{message.time}}</span>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+          <ng-template #outgoing_msg>
+            <div class="outgoing-msg">
+              <div class="sent-msg">
+                <p *ngIf="!message.fileName || message.fileName === ''">{{ message.text }}</p>
+                <p *ngIf="message.fileName" ngbTooltip="CLick to download" placement="top" (click)="download(message)">
+                  <i class="fa fa-file" aria-hidden="true"></i>
+                  {{message.fileName}} is sent
+                </p>
+                <span class="time-date"> {{message.time}}</span>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+      </ol>
+      <div class="input-group type-msg">
+        <input type="text" class="form-control" placeholder="Type a message" name="newMessage"
+               [(ngModel)]="newMessage" (keydown.enter)="sendMessage()"/>
+        <span class="input-group-btn">
+          <button class="btn btn-primary" (click)="sendMessage()" [disabled]="newMessage === ''"
+                  placement="top" ngbTooltip="Send message">
+            <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+          </button>
+          <button type="button" class="btn btn-secondary" (click)="fileInput.click()"
+                  placement="top" ngbTooltip="Click to upload file">
+            <i class="fa fa-upload"></i>
+            <input #fileInput type="file" (change)="fileChangeEvent($event)" style="display:none;" />
+          </button>
+        </span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<router-outlet></router-outlet>
